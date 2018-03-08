@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>VendingMachineTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">edu.towson.cis.cosc442.project3.vendingmachine (Mar 7, 2018 8:16:23 PM)</a> &gt; <a href="../../index.html" class="el_group">VendingMachine</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">edu.towson.cis.cosc442.project3.vendingmachine</a> &gt; <span class="el_source">VendingMachineTest.java</span></div><h1>VendingMachineTest.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package edu.towson.cis.cosc442.project3.vendingmachine;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * @author Collin
+ *unit test class for VendingMachine
+ */
+<span class="fc" id="L16">public class VendingMachineTest {</span>
+
+	VendingMachine machine1, machine2;
+	VendingMachineItem item;
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		
+<span class="fc" id="L27">		machine1 = new VendingMachine();</span>
+<span class="fc" id="L28">		machine2 = new VendingMachine();</span>
+<span class="fc" id="L29">		item = new VendingMachineItem(&quot;chips&quot;, 1.0);</span>
+<span class="fc" id="L30">	}</span>
+
+	
+	@Test
+	public void testGetSlotIndex() 
+	{
+<span class="fc" id="L36">		assertEquals(0, machine1.getSlotIndex(&quot;A&quot;));</span>
+<span class="fc" id="L37">		assertEquals(1, machine1.getSlotIndex(&quot;B&quot;));</span>
+<span class="fc" id="L38">		assertEquals(2, machine1.getSlotIndex(&quot;C&quot;));</span>
+<span class="fc" id="L39">		assertEquals(3, machine1.getSlotIndex(&quot;D&quot;));</span>
+<span class="fc" id="L40">	}</span>
+	
+	/**
+	 * Test method for {@link edu.towson.cis.cosc442.project3.vendingmachine.VendingMachine#addItem(edu.towson.cis.cosc442.project3.vendingmachine.VendingMachineItem, java.lang.String)}.
+	 * ensures when item is added, it is stored properly and can be retrieved
+	 */
+	@Test
+	public void testAddItem() {
+		//first progressive step
+<span class="fc" id="L49">		machine1.addItem(item, &quot;A&quot;);</span>
+<span class="fc" id="L50">		assertEquals(item, machine1.getItem(&quot;A&quot;));</span>
+<span class="fc" id="L51">	}</span>
+	
+	/*
+	 *ensures an exception is thrown when an item is added to an occupied space
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testAddItemOccupied() {
+<span class="fc" id="L58">		machine1.addItem(item,  &quot;A&quot;);</span>
+<span class="nc" id="L59">		machine1.addItem(item, &quot;A&quot;);</span>
+<span class="nc" id="L60">	}</span>
+	/*
+	 * ensures an exception is thrown when an invalid code is used
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testAddItemInvalidCode() {
+<span class="nc" id="L66">		machine1.addItem(item, &quot;Z&quot;);</span>
+<span class="nc" id="L67">	}</span>
+
+	/**
+	 * Test method for {@link edu.towson.cis.cosc442.project3.vendingmachine.VendingMachine#removeItem(java.lang.String)}.
+	 *ensures after an item is added, it can be removed
+	 */
+	@Test
+	public void testRemoveItem() {
+<span class="fc" id="L75">		machine1.addItem(item, &quot;A&quot;);</span>
+<span class="fc" id="L76">		machine1.removeItem(&quot;A&quot;);</span>
+<span class="fc" id="L77">		assertEquals(null, machine1.getItem(&quot;A&quot;));</span>
+<span class="fc" id="L78">	}</span>
+	/*
+	 * ensures item cannot be removed if there isn't anything to be removed
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testRemoveItemEmptySlot() {
+<span class="nc" id="L84">		machine1.removeItem(&quot;A&quot;);</span>
+<span class="nc" id="L85">	}</span>
+	/*
+	 * ensures exception is thrown when invalid code is used to be removed
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testRemoveItemInvalidCode() {
+<span class="nc" id="L91">		machine1.removeItem(&quot;Z&quot;);</span>
+<span class="nc" id="L92">	}</span>
+
+	/**
+	 * Test method for {@link edu.towson.cis.cosc442.project3.vendingmachine.VendingMachine#insertMoney(double)}.
+	 *ensures money is inserted properly
+	 */
+	@Test
+	public void testInsertMoney() {
+<span class="fc" id="L100">		machine1.insertMoney(1.0);</span>
+<span class="fc" id="L101">		assertEquals(1.0, machine1.getBalance(), 0.0001);</span>
+<span class="fc" id="L102">	}</span>
+	
+	/*
+	 * ensures exception is thrown if value is below zero
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testInsertMoneyBelowZero() {
+<span class="nc" id="L109">		machine1.insertMoney(-1.0);</span>
+<span class="nc" id="L110">	}</span>
+
+	/**
+	 * Test method for {@link edu.towson.cis.cosc442.project3.vendingmachine.VendingMachine#getBalance()}.
+	 * ensures balance is returned properly
+	 */
+	@Test
+	public void testGetBalance() {
+<span class="fc" id="L118">		machine1.insertMoney(1.0);</span>
+<span class="fc" id="L119">		assertEquals(1.0, machine1.getBalance(), 0.0001);</span>
+<span class="fc" id="L120">		assertEquals(0.0, machine2.getBalance(), 0.0001);</span>
+<span class="fc" id="L121">	}</span>
+	/*
+	 * ensures exception is thrown when balance is retrieved when it's below zero
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testGetBalanceBelowZero() {
+<span class="nc" id="L127">		machine1.insertMoney(-1.0);</span>
+<span class="nc" id="L128">		machine1.getBalance();</span>
+<span class="nc" id="L129">	}</span>
+	/**
+	 * Test method for {@link edu.towson.cis.cosc442.project3.vendingmachine.VendingMachine#makePurchase(java.lang.String)}.
+	 * ensures a true is returned when purchase is made properly
+	 */
+	@Test
+	public void testMakePurchase() {
+<span class="fc" id="L136">		machine1.addItem(item,  &quot;A&quot;);</span>
+<span class="fc" id="L137">		machine1.insertMoney(1.0);</span>
+<span class="fc" id="L138">		assertEquals(true, machine1.makePurchase(&quot;A&quot;));</span>
+<span class="fc" id="L139">		assertEquals(false, machine2.makePurchase(&quot;A&quot;));</span>
+<span class="fc" id="L140">	}</span>
+	/*
+	 * ensures purchase cannot be made if balance is less than zero
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testMakePurchaseBalanceBelowZero() {
+<span class="fc" id="L146">		machine1.addItem(item,  &quot;A&quot;);</span>
+<span class="nc" id="L147">		machine1.insertMoney(-1.0);</span>
+<span class="nc" id="L148">		machine1.makePurchase(&quot;A&quot;);</span>
+<span class="nc" id="L149">	}</span>
+	/*
+	 * ensures purchase cannot be made for an item that doesn't exist
+	 */
+	@Test
+	public void testMakePurchaseEmptySlot() {
+<span class="fc" id="L155">		assertEquals(false, machine1.makePurchase(&quot;A&quot;));</span>
+<span class="fc" id="L156">	}</span>
+
+	/**
+	 * Test method for {@link edu.towson.cis.cosc442.project3.vendingmachine.VendingMachine#returnChange()}.
+	 * ensures change is returned and balance is set to zero afterwards
+	 */
+	@Test
+	public void testReturnChange() {
+<span class="fc" id="L164">		machine1.insertMoney(1.0);</span>
+<span class="fc" id="L165">		assertEquals(1.0, machine1.returnChange(), 0.0001);</span>
+<span class="fc" id="L166">		assertEquals(0.0, machine1.getBalance(), 0.0001);</span>
+<span class="fc" id="L167">		assertEquals(0.0, machine2.returnChange(), 0.0001);</span>
+<span class="fc" id="L168">	}</span>
+	/*
+	 * ensures no change is returned if money inserted is less than zero
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testReturnChangeBelowZero() {
+<span class="nc" id="L174">		machine1.insertMoney(-1.0);</span>
+<span class="nc" id="L175">		machine1.returnChange();</span>
+<span class="nc" id="L176">	}</span>
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L183">		machine1 = null;</span>
+<span class="fc" id="L184">		machine2 = null;</span>
+<span class="fc" id="L185">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>edu.towson.cis.cosc442.project3.vendingmachine (Mar 7, 2018 8:16:23 PM)</div></body></html>
